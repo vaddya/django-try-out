@@ -9,6 +9,7 @@ class Note(models.Model):
     note_text = models.CharField(max_length=200)
     label = models.CharField(max_length=30)
     pub_date = models.DateTimeField(default=timezone.now())
+    mod_date = models.DateTimeField(default=timezone.now())
     author = models.CharField(max_length=30)
     is_pinned = models.BooleanField()
 

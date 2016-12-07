@@ -1,6 +1,5 @@
 {% load staticfiles %}
 
-<!DOCTYPE html>
 <html>
 <head>
     <title>Notes</title>
@@ -12,7 +11,9 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'notes:index' %}">Notes</a>
+                <a class="navbar-brand" href="{% url 'notes:index' %}">
+                    <img id="logo" src="{% static 'notes/img/logo.png' %}">
+                </a>
             </div>
 
             <form class="navbar-form navbar-right">
@@ -28,18 +29,22 @@
 
         </div>
     </nav>
-
     {% if latest_note_list %}
         {% for note in latest_note_list %}
             <div class="panel panel-default">
                 <div class="panel-heading panel-title">
                     <h4>
+                        {% if note.is_pinned %}
+                            <img class="pin pinned" src="{% static 'notes/img/pin.png' %}" title="Note pinned">
+                        {% else %}
+                            <img class="pin not-pinned" src="{% static 'notes/img/pin.png' %}" title="Note not pinned">
+                        {% endif %}
                         <a href="{% url 'notes:detail' note.id %}">{{ note.note_title }}</a>
                         <span class="label label-default" style="float: right;">{{ note.label }}</span>
                     </h4>
                 </div>
                 <div class="panel-body">
-                    <p>{{ note.note_text }}</p>
+                    <h4>{{ note.note_text }}</h4>
                 </div>
             </div>
         {% endfor %}

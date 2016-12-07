@@ -1,6 +1,5 @@
 {% load staticfiles %}
 
-<!DOCTYPE html>
 <html>
 <head>
     <title>{{ note.note_title }} - Notes</title>
@@ -12,7 +11,9 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'notes:index' %}">Notes</a>
+                <a class="navbar-brand" href="{% url 'notes:index' %}">
+                    <img id="logo" src="{% static 'notes/img/logo.png' %}">
+                </a>
             </div>
 
             <form class="navbar-form navbar-right">
@@ -32,15 +33,27 @@
     <div class="panel panel-default">
         <div class="panel-heading panel-title">
             <h4>
+                {% if note.is_pinned %}
+                    <img class="pin pinned" src="{% static 'notes/img/pin.png' %}" title="Note pinned">
+                {% else %}
+                    <img class="pin not-pinned" src="{% static 'notes/img/pin.png' %}" title="Note not pinned">
+                {% endif %}
                 {{ note.note_title }}
-                <span class="label label-default" style="float: right;">{{ note.label }}</span>
+                <span class="label label-default right-label">{{ note.label }}</span>
             </h4>
         </div>
         <div class="panel-body">
-            <p>{{ note.note_text }}</p>
+            <form action="{% url 'notes:save' note.id %}" method="post">
+                {% csrf_token %}
+                <textarea class="form-control" id="note_text" name="note_text" rows="5">{{ note.note_text }}</textarea>
+                <input type="submit" class="btn btn-default" value="Save">
+                <button type="submit" class="btn btn-default right-label">Delete</button>
+            </form>
+
         </div>
         <div class="panel-body">
-            <p>Published by: {{ note.author }} at {{ note.pub_date }}</p>
+            <p>Created by: {{ note.author }} at {{ note.pub_date }}</p>
+            <p>Last modified: {{ note.mod_date }}</p>
         </div>
     </div>
 </main>
