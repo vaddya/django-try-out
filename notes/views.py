@@ -28,3 +28,18 @@ def save(request, note_id):
     note.mod_date = timezone.now()
     note.save()
     return HttpResponseRedirect(reverse('notes:detail', args=(note_id)))
+
+
+def remove(request, note_id):
+    get_object_or_404(Note, pk=note_id).delete()
+    return HttpResponseRedirect(reverse('notes:index'))
+
+
+def create(request, note_title, note_text, author, is_pinned):
+    Note.objects.create(Note(
+        note_title=note_title,
+        note_text=note_text,
+        author=author,
+        is_pinned=is_pinned)
+    )
+    return HttpResponseRedirect(reverse('notes:index'))
